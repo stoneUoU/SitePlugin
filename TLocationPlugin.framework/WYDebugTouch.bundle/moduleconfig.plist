@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>version</key>
+	<string>1.0</string>
+	<key>name</key>
+	<string>WYDebugTouch</string>
+	<key>scheme</key>
+	<string>WYDebugTouch</string>
+	<key>delegateClass</key>
+	<string>WYDebugTouchAppDelegate</string>
+	<key>router_list</key>
+	<dict>
+		<key>setting</key>
+		<dict>
+			<key>name</key>
+			<string>WYDebugTouch/Setting</string>
+			<key>className</key>
+			<string>WYDebugTouchSettingViewController</string>
+			<key>type</key>
+			<string>push</string>
+		</dict>
+		<key>userinfo</key>
+		<dict>
+			<key>name</key>
+			<string>WYDebugTouch/UserInfo</string>
+			<key>className</key>
+			<string>WYDebugTouchUserInfoVC</string>
+			<key>type</key>
+			<string>push</string>
+		</dict>
+	</dict>
+	<key>service_list</key>
+	<dict>
+		<key>registerModule</key>
+		<dict>
+			<key>name</key>
+			<string>WYDebugTouch/RegisterModule</string>
+			<key>className</key>
+			<string>WYDebugTouchImplementation</string>
+			<key>protocol</key>
+			<string>WYDebugTouchRegisteProtocol</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

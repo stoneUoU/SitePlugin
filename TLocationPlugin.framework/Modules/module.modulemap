@@ -1,0 +1,6 @@
+framework module TLocationPlugin {
+  umbrella header "TLocationPlugin.h"
+
+  export *
+  module * { export * }
+}
