@@ -169,7 +169,7 @@
 {
     if (!_gradientNavigationView) {
         CHSGradientNavigationModel *model = [[CHSGradientNavigationModel alloc] init];
-        model.title = @"关于我们";
+        model.title = @"关于我";
         model.titleColor = [UIColor color_OCHexStr:@"#303133"];
         model.leftImage = @"back";
         model.rightImage = @"";
@@ -203,7 +203,7 @@
         _appNameLabel.font = [UIFont boldSystemFontOfSize:20];
         _appNameLabel.textColor = [UIColor color_OCHexStr:@"#303133"];;
         _appNameLabel.textAlignment = NSTextAlignmentCenter;
-        _appNameLabel.text = @"微信_随意调整位置版";
+        _appNameLabel.text = @"随心所欲_调整位置版";
     }
     return _appNameLabel;
 }
@@ -226,7 +226,7 @@
         _switchView = [UIView new];
         _switchView.layer.cornerRadius = 6.0;
         _switchView.layer.masksToBounds = YES;
-        _switchView.layer.borderColor = [[UIColor color_OCHexStr:@"303133"] CGColor];
+        _switchView.layer.borderColor = [[UIColor color_OCHexStr:@"909399"] CGColor];
         _switchView.layer.borderWidth = 0.5;
     }
     return _switchView;

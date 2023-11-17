@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger, TMapViewAnnotationType) {
     [self.excuteButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
         make.size.equalTo(@(CGSizeMake(SCREENWIDTH - 32, 44)));
-        make.bottom.equalTo(self.view.mas_bottom).offset(-BottomDangerAreaHeight);
+        make.bottom.equalTo(self.view.mas_bottom).offset(-(BottomDangerAreaHeight+16));
     }];
     [self.mapView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).offset(StatusBarHeight+NavBarHeight);
@@ -124,25 +124,6 @@ typedef NS_ENUM(NSUInteger, TMapViewAnnotationType) {
         return;
     }
     [self.locationManager requestWhenInUseAuthorization];
-}
-
-#pragma mark CoreLocation delegate
-
-- (void)touchMapView:(UIGestureRecognizer *)gestureRecognizer {
-    if (self.searchTextField.isEditing) {
-        [self.searchTextField resignFirstResponder];
-        return;
-    }
-    self.shouldRefreshUserLocation = NO;
-    CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
-    CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint
-                                                      toCoordinateFromView:self.mapView];
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude
-                                                      longitude:touchMapCoordinate.longitude];
-    [self refreshViewWithLocation:location
-                 setMapViewCenter:NO
-                         animated:YES
-                   annotationType:TMapViewAnnotationTypeFirst];
 }
 
 - (void)freshUserLocation {
@@ -278,18 +259,12 @@ typedef NS_ENUM(NSUInteger, TMapViewAnnotationType) {
     [searchRequest setRegion:self.mapView.region];
     MKLocalSearch *localSearch = [[MKLocalSearch alloc] initWithRequest:searchRequest];
     [localSearch startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
-        // [self.mapView setRegion:response.boundingRegion];
         NSMutableArray<CHSLocationModel *> *locationModelArray = [NSMutableArray<CHSLocationModel *> array];
         for (MKMapItem *item in response.mapItems) {
-            CHSLocationModel *model =[CHSLocationModel modelWithSubLocality:item.placemark.subLocality
-                                                                   name:item.placemark.name
-                                                               latitude:item.placemark.location.coordinate.latitude
-                                                              longitude:item.placemark.location.coordinate.longitude];
+            CHSLocationModel *model =[CHSLocationModel modelWithSubLocality:item.placemark.subLocality name:item.placemark.name latitude:item.placemark.location.coordinate.latitude longitude:item.placemark.location.coordinate.longitude];
             [locationModelArray addObject:model];
         }
-        
-        [self setMapViewCenter:response.mapItems.firstObject.placemark.location.coordinate
-                      animated:YES];
+        [self setMapViewCenter:response.mapItems.firstObject.placemark.location.coordinate animated:YES];
         [self refreshAnnotationsForModelArray:locationModelArray];
         [self updateTableViewForArray:locationModelArray];
     }];
@@ -321,21 +296,39 @@ typedef NS_ENUM(NSUInteger, TMapViewAnnotationType) {
     }
 }
 
-#pragma mark - UITableViewDelegate, UITableViewDataSource
+#pragma mark CoreLocation delegate
+#pragma mark
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
+- (void)touchMapView:(UIGestureRecognizer *)gestureRecognizer {
+    if (self.searchTextField.isEditing) {
+        [self.searchTextField resignFirstResponder];
+        return;
+    }
+    self.shouldRefreshUserLocation = NO;
+    CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+    CLLocationCoordinate2D touchMapCoordinate = [self.mapView convertPoint:touchPoint
+                                                      toCoordinateFromView:self.mapView];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:touchMapCoordinate.latitude
+                                                      longitude:touchMapCoordinate.longitude];
+    [self refreshViewWithLocation:location
+                 setMapViewCenter:NO
+                         animated:YES
+                   annotationType:TMapViewAnnotationTypeFirst];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     [self locationHandlerWithAuthorizationStatus:status];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
-{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     [self.locationManager stopUpdatingLocation];
-//    CLLocation *currentLocation = [locations lastObject];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self refreshViewWithLocation:self.mapView.userLocation.location setMapViewCenter:YES animated:YES annotationType:TMapViewAnnotationTypeFirst];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self refreshViewWithLocation:self.mapView.userLocation.location setMapViewCenter:YES animated:YES annotationType:TMapViewAnnotationTypeFirst];
+//    });
 }
+
+#pragma mark - UITableViewDelegate, UITableViewDataSource
+#pragma mark -
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -511,9 +504,8 @@ typedef NS_ENUM(NSUInteger, TMapViewAnnotationType) {
         _excuteButton.tag = 1;
         _excuteButton.layer.cornerRadius = 22.0;
         _excuteButton.layer.masksToBounds = YES;
-        _excuteButton.layer.borderColor = [[UIColor color_OCHexStr:@"303133"] CGColor];
-        _excuteButton.layer.borderWidth = 0.5;
-        [_excuteButton setTitleColor:[UIColor color_OCHexStr:@"303133"] forState:UIControlStateNormal];
+        _excuteButton.backgroundColor = [UIColor color_OCHexStr:@"#3B71E8"];
+        [_excuteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_excuteButton addTarget:self action:@selector(toExcute:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _excuteButton;

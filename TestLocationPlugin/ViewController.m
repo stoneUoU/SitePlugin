@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "PageManager.h"
 
 @interface ViewController ()
 
@@ -16,7 +17,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.userInteractionEnabled = YES;
+    UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toExcute:)];
+    [self.view addGestureRecognizer:ges];
+}
+
+- (void)toExcute:(UIButton *)sender {
+    [PageManager.sharedInstance presentViewController:@"CHSFetchLocationDataViewController" withParam:nil inNavigationController:YES animated:YES];
 }
 
 

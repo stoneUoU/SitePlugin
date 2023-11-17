@@ -72,7 +72,6 @@
 */
 
 - (void)toExcute:(UIButton *)sender {
-    NSLog(@"6666666666666666666");
     !self.handle ?: self.handle();
 }
 
@@ -104,9 +103,8 @@
         _excuteButton.tag = 1;
         _excuteButton.layer.cornerRadius = 22.0;
         _excuteButton.layer.masksToBounds = YES;
-        _excuteButton.layer.borderColor = [[UIColor color_OCHexStr:@"#303133"] CGColor];
-        _excuteButton.layer.borderWidth = 0.5;
-        [_excuteButton setTitleColor:[UIColor color_OCHexStr:@"#303133"] forState:UIControlStateNormal];
+        _excuteButton.backgroundColor = [UIColor color_OCHexStr:@"#3B71E8"];
+        [_excuteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_excuteButton addTarget:self action:@selector(toExcute:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _excuteButton;
